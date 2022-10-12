@@ -1,10 +1,9 @@
-package com.github.gurunelee.sandbox
+package com.github.gurunelee.sandbox.config
 
-import org.springframework.context.annotation.Bean
+import com.github.gurunelee.sandbox.resolver.RequestLocaleResolver
+import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
-import org.springframework.web.servlet.LocaleContextResolver
 import org.springframework.web.servlet.LocaleResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -15,15 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  * @version sandbox
  * @since sandbox
  */
-@Profile("!test")
 @Configuration
-class AppConfig: WebMvcConfigurer {
+class AppConfig(
+    private val applicationContext: ApplicationContext
+): WebMvcConfigurer {
+
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
-        val localeContextResolver
+        val localeResolver = applicationContext.getBean(LocaleResolver::class.java)
+        resolvers.add(RequestLocaleResolver(localeResolver))
     }
 
-    @Bean
-    fun localContextResolver(): LocaleResolver {
-        return LocaleContextResolver()
-    }
 }

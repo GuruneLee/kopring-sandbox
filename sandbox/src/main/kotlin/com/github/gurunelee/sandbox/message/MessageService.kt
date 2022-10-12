@@ -1,8 +1,8 @@
-package com.github.gurunelee.sandbox
+package com.github.gurunelee.sandbox.message
 
+import com.github.gurunelee.sandbox.converter.SupportLang
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Component
-import java.util.Locale
 
 /**
  * Created by chlee on 2022/10/04.
@@ -12,12 +12,14 @@ import java.util.Locale
  * @since sandbox
  */
 @Component
-class MessageService(private val messageSource: MessageSource){
+class MessageService(
+    private val messageSource: MessageSource
+) {
     fun getMessage(
         messageId: String,
-        locale: Locale,
+        supportLang: SupportLang,
         args: Array<Any>? = null
     ): String {
-        return messageSource.getMessage(messageId, args, locale)
+        return messageSource.getMessage(messageId, args, supportLang.locale)
     }
 }
